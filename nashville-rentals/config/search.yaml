@@ -1,0 +1,192 @@
+# nashrent search profile
+#
+# This file *is* the search. Edit it, re-run `nashrent run`, and everything
+# downstream (filtering, scoring, ranking, alerts) follows.
+
+city: "Nashville, TN"
+db_path: "var/nashrent.sqlite3"
+report_dir: "reports"
+
+budget:
+  max_price: 2500
+  # Listings above max_price but at or under stretch_price still show up,
+  # they just lose points. A great house at $2,650 is worth a look.
+  stretch_price: 2800
+  min_price: 900
+
+requirements:
+  min_beds: 2
+  min_baths: 1
+  # Not a hard floor — drives the "room to host" score instead, so a charming
+  # 1,250 sqft bungalow with a big deck can still beat a boxy 1,600.
+  hosting_target_sqft: 1500
+  min_sqft: null
+  target_move_in: 2027-03-01
+  move_in_window_days: 45
+
+# Places you need to reach regularly. Drive times are computed to each one.
+anchors:
+  - name: work-downtown
+    lat: 36.1627
+    lon: -86.7816
+    mode: driving
+    max_minutes: 25
+    weight: 1.0
+  - name: partner-green-hills
+    lat: 36.1047
+    lon: -86.8158
+    mode: driving
+    max_minutes: 25
+    weight: 1.0
+
+neighborhoods:
+  tier_scores:
+    bullseye: 1.00
+    strong: 0.85
+    good: 0.68
+    fringe: 0.45
+    far: 0.22
+  tiers:
+    # West Nashville core — the stated first choice, and the best geographic
+    # compromise between downtown and Green Hills.
+    bullseye:
+      - Sylvan Park
+      - Sylvan Heights
+      - The Nations
+      - Richland-West End
+      - Charlotte Park
+      - West End Park
+      - Hillwood
+    # Green Hills side + the walkable urban belt south of West End.
+    strong:
+      - Green Hills
+      - Belmont-Hillsboro
+      - Hillsboro Village
+      - 12 South
+      - Melrose
+      - Whitland
+      - Cherokee Park
+      - West Meade
+      - Midtown
+      - Edgehill
+    # Urban, walkable, good bar/restaurant density — just not west.
+    good:
+      - Germantown
+      - Salemtown
+      - Wedgewood-Houston
+      - East Nashville
+      - Lockeland Springs
+      - Five Points
+      - Historic Edgefield
+      - Berry Hill
+      - The Gulch
+      - Woodbine
+    fringe:
+      - Inglewood
+      - Crieve Hall
+      - Forest Hills
+      - Donelson
+      - Madison
+      - East Hill
+    # Reachable but suburban and/or a long haul to both offices.
+    far:
+      - Bellevue
+      - Hermitage
+      - Antioch
+      - Old Hickory
+      - Goodlettsville
+      - Brentwood
+      - Nolensville
+  # Outside any reasonable commute — dropped before scoring.
+  blocklist:
+    - Murfreesboro
+    - Clarksville
+    - Spring Hill
+    - Columbia
+    - Gallatin
+    - Lebanon
+    - Mount Juliet
+    - Smyrna
+    - La Vergne
+    - Dickson
+    - Franklin
+  unknown_score: 0.45
+  # Point this at a real GeoJSON FeatureCollection to replace the bundled
+  # centroid+radius approximation with true boundaries.
+  geojson_path: null
+
+# Relative importance. Normalized to 100 points total, so you can use any scale.
+weights:
+  neighborhood: 18
+  hosting_space: 18
+  commute: 16
+  price_value: 12
+  walkability: 12
+  home_type: 10
+  dining_nightlife: 8
+  safety: 6
+
+sources:
+  craigslist:
+    enabled: true
+    options:
+      area_id: 25          # Nashville
+      search_path: apa     # apts/housing for rent
+      include_nearby: false
+  # Everything below needs either a residential proxy or a paid API key —
+  # see README "Sources". Off by default so a fresh clone works immediately.
+  zillow:
+    enabled: false
+    options:
+      region: "Nashville, TN"
+  realtor:
+    enabled: false
+    options:
+      region: "Nashville_TN"
+  apartments:
+    enabled: false
+    options: {}
+  # Always works: drop listings you find by hand into a CSV and they get
+  # geocoded, enriched, scored and tracked alongside the scraped ones.
+  csv:
+    enabled: true
+    options:
+      path: "config/manual-listings.csv"
+
+enrich:
+  enabled: true
+  nominatim_url: "https://nominatim.openstreetmap.org"
+  overpass_url: "https://overpass-api.de/api/interpreter"
+  osrm_url: "https://router.project-osrm.org"
+  socrata_domain: "data.nashville.gov"
+  socrata_dataset: "2u6v-ujjs"
+  socrata_app_token: "${SOCRATA_APP_TOKEN}"
+  safety_radius_m: 800
+  safety_lookback_days: 365
+  providers: [geocode, amenities, commute, safety]
+  # Enrichment is the slow part (4 API calls per address). Cap it per run;
+  # already-enriched listings are cached in SQLite and skipped.
+  max_enrich_per_run: 60
+
+net:
+  user_agent: "nashrent/0.1 (personal rental search)"
+  contact_email: null
+  request_timeout: 25.0
+  per_host_delay: 1.5
+  max_retries: 3
+  respect_robots: true
+  cache_dir: "var/http-cache"
+  cache_ttl_seconds: 3600
+  proxy: null
+
+notify:
+  enabled: false
+  min_score: 70
+  only_new: true
+  webhook_url: null
+  smtp_host: null
+  smtp_port: 587
+  smtp_user: null
+  smtp_password_env: "NASHRENT_SMTP_PASSWORD"
+  email_to: []
+  email_from: null
