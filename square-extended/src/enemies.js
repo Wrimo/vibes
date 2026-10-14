@@ -431,7 +431,7 @@ SQ.ENEMY = {};
   };
 
   E.hive = {
-    defaults: () => ({ r: 54, hp: 6, boss: true, name: 'HIVE', rate: 2.3, maxMinions: 5, speed: 70, invTime: 0.9 }),
+    defaults: () => ({ r: 54, hp: 5, boss: true, name: 'HIVE', rate: 2.6, maxMinions: 4, speed: 70, invTime: 0.9 }),
     init(e) {
       e.maxHp = e.hp;
       e.cool = 1.5;
@@ -531,7 +531,7 @@ SQ.ENEMY = {};
   };
 
   E.engine = {
-    defaults: () => ({ r: 46, hp: 5, boss: true, name: 'ENGINE', speed: 80, invTime: 1 }),
+    defaults: () => ({ r: 46, hp: 4, boss: true, name: 'ENGINE', speed: 80, invTime: 1 }),
     init(e) {
       e.maxHp = e.hp;
       e.fa = 0;
@@ -565,11 +565,11 @@ SQ.ENEMY = {};
       if (e.cool <= 0) {
         e.cool = 2.4 - (e.maxHp - e.hp) * 0.2;
         if (kind === 0) {
-          const n = 12;
-          for (let i = 0; i < n; i++) w.fireBullet(e.x, e.y, e.fa + (i * Math.PI * 2) / n, 210 * w.K.enemySpeed);
+          const n = 10;
+          for (let i = 0; i < n; i++) w.fireBullet(e.x, e.y, e.fa + (i * Math.PI * 2) / n, 190 * w.K.enemySpeed);
         } else if (kind === 1 && p.alive) {
           const a = SQ.angleTo(e.x, e.y, p.x, p.y);
-          for (let i = -2; i <= 2; i++) w.fireBullet(e.x, e.y, a + i * 0.16, 280 * w.K.enemySpeed);
+          for (let i = -1; i <= 1; i++) w.fireBullet(e.x, e.y, a + i * 0.2, 260 * w.K.enemySpeed);
         }
         SQ.audio.play('shoot');
       }
