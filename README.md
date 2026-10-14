@@ -7,6 +7,7 @@ across them, so they can be built, run and broken independently.
 | Project | What it is |
 |---|---|
 | [`nashville-rentals/`](nashville-rentals/) | Monitors Nashville homes for rent and ranks them against a personal fit profile (neighborhood, commute to two workplaces, room to host, walkability). Python + SQLite. |
+| [`square-extended/`](square-extended/) | An extended version of the game (square): 60 campaign levels across six chapters with bosses, 20 challenges and six endless arenas. Plain HTML5 canvas + JS, no build step. |
 
 ## Adding a project
 
