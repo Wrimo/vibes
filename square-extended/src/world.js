@@ -155,7 +155,10 @@ SQ.World = class World {
   handleInput(input) {
     const m = input.move();
     this.moveIn = m;
-    if (input.pressed('launch')) this.launchBuf = this.K.buffer;
+    if (input.pressed('launch')) {
+      this.launchBuf = this.K.buffer;
+      this.launchAim = input.launchAim ? input.launchAim() : null;
+    }
     if (input.pressed('recall')) this.recall();
   }
 
@@ -198,11 +201,22 @@ SQ.World = class World {
         nx = Math.cos(p.face);
         ny = Math.sin(p.face);
       }
+      // A click sends the square toward the cursor instead.
+      const aim = this.launchAim;
+      const ad = aim ? SQ.dist(s.x, s.y, aim.x, aim.y) : 0;
+      let aimed = false;
+      if (aim && ad > 1) {
+        nx = (aim.x - s.x) / ad;
+        ny = (aim.y - s.y) / ad;
+        aimed = true;
+      }
       const t = SQ.clamp((K.range - d) / (K.range - (K.pr + K.sr)), 0, 1);
       const sp = K.vMin + (K.vMax - K.vMin) * t;
       // Push the square clear of the player so it doesn't clip us on frame one.
       const minD = K.pr + K.sr + 2;
-      if (d < minD) {
+      // Aimed back through yourself: let it pass through you harmlessly.
+      s.grace = aimed && nx * (p.x - s.x) + ny * (p.y - s.y) > 0 ? 0.35 : 0;
+      if (d < minD && !aimed) {
         s.x = p.x + nx * minD;
         s.y = p.y + ny * minD;
       }
@@ -354,6 +368,7 @@ SQ.World = class World {
     const K = this.K;
     const p = this.player;
     if (s.portalCd > 0) s.portalCd -= dt;
+    if (s.grace > 0) s.grace -= dt;
     for (const [id, t] of s.hits) {
       if (t - dt <= 0) s.hits.delete(id);
       else s.hits.set(id, t - dt);
@@ -500,6 +515,7 @@ SQ.World = class World {
     const c = SQ.circleCircle(s.x, s.y, s.r, p.x, p.y, p.r);
     if (!c) return;
     const speed = Math.hypot(s.vx, s.vy);
+    if (isPlayer && s.grace > 0) return;
     if (speed >= K.lethal) {
       if (isPlayer) {
         if (this.state === 'play') this.killPlayer(s.own === 'player' ? 'hit by your own square' : 'hit by its square');

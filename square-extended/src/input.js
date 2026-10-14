@@ -3,7 +3,7 @@
 SQ.input = (() => {
   const down = new Set();
   const pressedQ = new Set(); // actions pressed since last frame
-  let mouse = { x: 0, y: 0, moved: false, click: false };
+  let mouse = { x: 0, y: 0, moved: false, click: false, active: false, aim: null };
   let usingPad = false;
 
   const KEYMAP = {
@@ -52,6 +52,7 @@ SQ.input = (() => {
   window.addEventListener('mousemove', (e) => {
     toLogical(e);
     mouse.moved = true;
+    mouse.active = true;
   });
   window.addEventListener('mousedown', (e) => {
     toLogical(e);
@@ -60,6 +61,8 @@ SQ.input = (() => {
     if (e.button === 0) {
       press('launch');
       mouse.click = true;
+      mouse.active = true;
+      mouse.aim = { x: mouse.x, y: mouse.y };
     }
     if (e.button === 2) press('recall');
     press('any');
@@ -97,6 +100,7 @@ SQ.input = (() => {
         const k = p.index + ':' + i;
         if (pressed && !padPrev[k]) {
           usingPad = true;
+          mouse.active = false;
           (PADMAP[i] || []).forEach(press);
           press('any');
           SQ.audio && SQ.audio.unlock();
@@ -151,6 +155,12 @@ SQ.input = (() => {
     endFrame() {
       mouse.moved = false;
       mouse.click = false;
+      mouse.aim = null;
+    },
+    // Where a click this frame asked the square to go, or null for a
+    // keyboard/gamepad launch (which pushes the square straight away).
+    launchAim() {
+      return frame.has('launch') && mouse.aim ? { x: mouse.aim.x, y: mouse.aim.y } : null;
     },
     pressed(act) {
       return frame.has(act);

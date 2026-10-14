@@ -378,6 +378,24 @@ SQ.drawing = (() => {
       ctx.stroke();
       ctx.setLineDash([]);
     }
+    // Mouse aim preview: where a click would send the square.
+    const m = SQ.input && SQ.input.mouse;
+    if (m && m.active && s.own === 'player' && this.state === 'play' && this.player.alive) {
+      const d = SQ.dist(this.player.x, this.player.y, s.x, s.y);
+      const ad = SQ.dist(s.x, s.y, m.x, m.y);
+      if (d <= K.range && ad > 1) {
+        const t = SQ.clamp((K.range - d) / (K.range - (K.pr + K.sr)), 0, 1);
+        const len = 90 + 230 * t;
+        ctx.strokeStyle = SQ.rgba(hot, 0.45);
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 8]);
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x + ((m.x - s.x) / ad) * len, s.y + ((m.y - s.y) / ad) * len);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
     if (speed > 60) D.trail(ctx, s.trail.concat([[s.x, s.y]]), 13, SQ.rgba(col, lethal ? 0.85 : 0.4));
     D.square(ctx, s.x, s.y, 30, s.ang, col);
     if (this.mods.ricochet && s.own === 'player' && !s.armed && lethal) D.square(ctx, s.x, s.y, 40, s.ang, null, SQ.rgba(hot, 0.6), 2);

@@ -58,7 +58,7 @@ SQ.FONT = '"Futura", "Century Gothic", "Avenir Next", "Trebuchet MS", sans-serif
 
   const controlWord = (which) => {
     if (I.usingPad) return which === 'launch' ? 'A' : 'B';
-    return which === 'launch' ? 'SPACE (or left-click)' : 'SHIFT (or right-click)';
+    return which === 'launch' ? 'left-click (it flies toward the cursor) or SPACE' : 'SHIFT (or right-click)';
   };
   const fillHint = (s) => s.replace('{launch}', controlWord('launch')).replace('{recall}', controlWord('recall'));
 
@@ -578,7 +578,7 @@ SQ.FONT = '"Futura", "Century Gothic", "Avenir Next", "Trebuchet MS", sans-serif
         text(ctx, 'HOW TO PLAY', W / 2, 70, { size: 46, color: pal.ui, weight: 'bold', spacing: 6 });
         const lines = [
           ['MOVE', 'WASD / arrows / left stick'],
-          ['LAUNCH', 'Space, J or Z / left-click / A or RB. Only works when the square is near you, and it flies harder the closer it is.'],
+          ['LAUNCH', 'Left-click sends the square toward the cursor. Space, J, Z, A or RB push it straight away from you. Only works when the square is near you, and it flies harder the closer it is.'],
           ['RECALL', 'Shift, K or X / right-click / B or LB. The square speeds up toward you until it arrives, so launch it away before it hits you.'],
           ['RESTART', 'R / Y'],
           ['PAUSE', 'Esc or P / Start'],

@@ -24,7 +24,7 @@ HTML5 game.
 | Action  | Keyboard / mouse                  | Gamepad        |
 |---------|-----------------------------------|----------------|
 | Move    | WASD / arrows                     | left stick / d-pad |
-| Launch  | Space, J or Z / left-click        | A, RB, RT      |
+| Launch  | left-click (toward the cursor) / Space, J or Z (straight away from you) | A, RB, RT |
 | Recall  | Shift, K or X / right-click       | B, X, LB, LT   |
 | Restart | R                                 | Y              |
 | Pause   | Esc or P                          | Start          |
