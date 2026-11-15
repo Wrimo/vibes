@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Brick</string>
+    <string name="brand">BRICK</string>
+
+    <string name="status_bricked">Bricked</string>
+    <string name="status_unbricked">Unbricked</string>
+    <string name="detail_bricked">%1$s blocked for %2$s. Tap your phone on the tag to unlock.</string>
+    <string name="detail_unbricked">Tap your phone on the tag to block your apps.</string>
+    <string name="detail_unpaired">No tag paired yet.</string>
+    <plurals name="apps">
+        <item quantity="one">%d app</item>
+        <item quantity="other">%d apps</item>
+    </plurals>
+
+    <string name="scan_paired">Tag paired. This is your brick now.</string>
+    <string name="scan_bricked">Bricked. Go do something else.</string>
+    <string name="scan_unbricked">Unbricked.</string>
+    <string name="scan_wrong_tag">That isn\'t your brick.</string>
+    <string name="scan_unusable_tag">That tag changes its ID on every tap, so it can\'t be a brick. Use an NTAG sticker or card.</string>
+    <string name="scan_no_apps">Choose some apps to block first.</string>
+    <string name="scan_blocker_off">App blocking is switched off, so nothing would be blocked. Turn it on below first.</string>
+
+    <string name="setup_label">Next step</string>
+    <string name="setup_no_nfc">This phone has no NFC, so it can\'t read a tag.</string>
+    <string name="setup_nfc_off">NFC is off. Turn it on so the phone can read your tag.</string>
+    <string name="setup_nfc_action">Open NFC settings</string>
+    <string name="setup_pair">Hold the back of your phone against your tag to pair it.</string>
+    <string name="setup_apps">Choose the apps that get blocked while you\'re bricked.</string>
+    <string name="setup_apps_action">Choose apps</string>
+    <string name="setup_blocker">Turn on Brick under Accessibility so it can cover blocked apps. It only sees which app is on screen, never what\'s in it.</string>
+    <string name="setup_blocker_off_while_bricked">App blocking has been switched off, so nothing is being blocked. Turn Brick back on under Accessibility.</string>
+    <string name="setup_blocker_action">Open Accessibility settings</string>
+    <string name="blocker_description">Covers the apps you chose with a lock screen while you\'re bricked. Brick is told which app comes to the front and nothing else: it cannot read the screen or what you type.</string>
+
+    <string name="apps_button">Apps to block (%d)</string>
+    <string name="picker_title">Apps to block</string>
+    <string name="picker_loading">Loading your apps…</string>
+    <string name="strict_title">Strict mode</string>
+    <string name="strict_detail">Also blocks Settings and uninstalling apps while bricked, so Brick can\'t simply be switched off.</string>
+
+    <string name="emergency_info">Emergency unlocks left: %1$d of %2$d</string>
+    <string name="emergency_unlock">Emergency unlock</string>
+    <string name="emergency_reset">Refill emergency unlocks</string>
+    <string name="emergency_confirm">Unbrick without the tag? This uses up an emergency unlock and leaves you with %d.</string>
+    <string name="emergency_reset_confirm">Put emergency unlocks back to 5?</string>
+    <string name="emergency_used">Unbricked with an emergency unlock.</string>
+    <string name="forget_button">Forget this tag</string>
+    <string name="forget_confirm">Forget the paired tag? The next tag you tap becomes the brick.</string>
+
+    <string name="block_app">%s is blocked.</string>
+    <string name="block_app_unknown">This is blocked.</string>
+    <string name="block_instruction">Tap your phone on the tag to unlock.</string>
+    <string name="block_duration">Bricked for %s</string>
+    <string name="block_home">Go home</string>
+    <string name="block_emergency">Emergency unlock (%d left)</string>
+</resources>
